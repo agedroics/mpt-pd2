@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -29,4 +31,10 @@ public class PlayerEntity {
     @Enumerated(EnumType.STRING)
     @Column(columnDefinition = "char(1)")
     private PlayerRole role;
+
+    @OneToMany(mappedBy = "player")
+    private Set<GoalEntity> goals = new HashSet<>();
+
+    @ManyToMany(mappedBy = "assistingPlayers")
+    private Set<GoalEntity> assistedGoals = new HashSet<>();
 }

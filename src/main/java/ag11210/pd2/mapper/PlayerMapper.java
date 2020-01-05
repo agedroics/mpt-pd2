@@ -10,5 +10,7 @@ public interface PlayerMapper {
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "team", ignore = true)
+    @Mapping(target = "goals", ignore = true)
+    @Mapping(target = "assistedGoals", ignore = true)
     PlayerEntity dtoToEntity(PlayerInfoDto playerInfoDto);
 }

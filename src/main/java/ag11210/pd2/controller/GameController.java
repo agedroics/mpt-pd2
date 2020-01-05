@@ -21,7 +21,7 @@ import javax.xml.bind.JAXB;
 import java.nio.charset.Charset;
 
 @RestController
-@RequestMapping(path = "games", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "api/games", produces = MediaType.APPLICATION_JSON_VALUE)
 public class GameController {
 
     @Autowired
@@ -114,6 +114,7 @@ public class GameController {
                 playerRepository.findByTeamAndNumber(teamDto.getName(), substitutionDto.getSubstituteNumber())
                         .ifPresent(substitution::setSubstitute);
                 substitutionRepository.save(substitution);
+                game.getSubstitutions().add(substitution);
             });
         }
 
@@ -129,6 +130,7 @@ public class GameController {
                 playerRepository.findByTeamAndNumber(teamDto.getName(), foulDto.getPlayerNumber())
                         .ifPresent(foul::setPlayer);
                 foulRepository.save(foul);
+                game.getFouls().add(foul);
             });
         }
 
@@ -141,6 +143,7 @@ public class GameController {
                         .ifPresent(goal::setPlayer);
                 goal.setPenalty(goalDto.getPenalty());
                 goalRepository.save(goal);
+                game.getGoals().add(goal);
                 if (goalDto.getAssistingPlayers() != null) {
                     goalDto.getAssistingPlayers()
                             .forEach(playerDto -> playerRepository.findByTeamAndNumber(teamDto.getName(), playerDto.getNumber())

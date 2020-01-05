@@ -1,6 +1,8 @@
 package ag11210.pd2.dto;
 
 import ag11210.pd2.configuration.LocalDateAdapter;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,6 +18,8 @@ import java.util.List;
 @Setter
 @EqualsAndHashCode
 @XmlRootElement(name = "Spele")
+@JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
+@JsonTypeName("Spele")
 public class GameDto {
 
     @XmlAttribute(name = "Laiks", required = true)

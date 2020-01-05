@@ -13,5 +13,8 @@ public interface GameMapper {
     @Mapping(target = "starters", ignore = true)
     @Mapping(target = "referee", ignore = true)
     @Mapping(target = "assistantReferees", ignore = true)
+    @Mapping(target = "fouls", ignore = true)
+    @Mapping(target = "goals", ignore = true)
+    @Mapping(target = "substitutions", ignore = true)
     GameEntity dtoToEntity(GameDto gameDto);
 }

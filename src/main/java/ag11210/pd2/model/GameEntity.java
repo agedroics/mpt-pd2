@@ -39,4 +39,13 @@ public class GameEntity {
 
     @ManyToMany
     private Set<RefereeEntity> assistantReferees = new HashSet<>();
+
+    @OneToMany(mappedBy = "game")
+    private Set<FoulEntity> fouls = new HashSet<>();
+
+    @OneToMany(mappedBy = "game")
+    private Set<GoalEntity> goals = new HashSet<>();
+
+    @OneToMany(mappedBy = "game")
+    private Set<SubstitutionEntity> substitutions = new HashSet<>();
 }
