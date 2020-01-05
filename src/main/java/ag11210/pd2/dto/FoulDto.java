@@ -13,8 +13,8 @@ import java.time.Duration;
 public class FoulDto {
 
     @XmlAttribute(name = "Laiks")
-    private Duration time;
+    private Duration time = Duration.ZERO;
 
     @XmlAttribute(name = "Nr")
-    private Integer playerNumber;
+    private Integer playerNumber = 0;
 }

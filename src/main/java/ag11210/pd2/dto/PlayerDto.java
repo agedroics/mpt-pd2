@@ -12,5 +12,5 @@ import javax.xml.bind.annotation.XmlAttribute;
 public class PlayerDto {
 
     @XmlAttribute(name = "Nr")
-    protected Integer number;
+    protected Integer number = 0;
 }

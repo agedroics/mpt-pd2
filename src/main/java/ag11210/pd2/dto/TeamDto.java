@@ -13,7 +13,7 @@ import java.util.List;
 @EqualsAndHashCode
 public class TeamDto {
 
-    @XmlAttribute(name = "Nosaukums")
+    @XmlAttribute(name = "Nosaukums", required = true)
     private String name;
 
     /*
@@ -21,13 +21,13 @@ public class TeamDto {
         pašreizējai Jackson versijai šī funkcionalitāte nestrādā.
         https://github.com/FasterXML/jackson-modules-base/issues/45
      */
-    @XmlElement(name = "Speletaji")
+    @XmlElement(name = "Speletaji", required = true)
     private PlayersDto players;
 
     @XmlElement(name = "Mainas")
     private SubstitutionsDto substitutions;
 
-    @XmlElement(name = "Pamatsastavs")
+    @XmlElement(name = "Pamatsastavs", required = true)
     private StartersDto starters;
 
     @XmlElement(name = "Sodi")
@@ -41,7 +41,7 @@ public class TeamDto {
     @EqualsAndHashCode
     public static class PlayersDto {
 
-        @XmlElement(name = "Speletajs")
+        @XmlElement(name = "Speletajs", required = true)
         private List<PlayerInfoDto> players;
     }
 
@@ -59,7 +59,7 @@ public class TeamDto {
     @EqualsAndHashCode
     public static class StartersDto {
 
-        @XmlElement(name = "Speletajs")
+        @XmlElement(name = "Speletajs", required = true)
         private List<PlayerDto> starters;
     }
 

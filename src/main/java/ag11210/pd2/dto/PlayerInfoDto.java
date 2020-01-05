@@ -1,5 +1,6 @@
 package ag11210.pd2.dto;
 
+import ag11210.pd2.model.PlayerRole;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -12,7 +13,7 @@ import javax.xml.bind.annotation.XmlAttribute;
 public class PlayerInfoDto {
 
     @XmlAttribute(name = "Nr")
-    protected Integer number;
+    protected Integer number = 0;
 
     @XmlAttribute(name = "Vards")
     private String firstName;
@@ -21,9 +22,5 @@ public class PlayerInfoDto {
     private String lastName;
 
     @XmlAttribute(name = "Loma")
-    private Role role;
-
-    public enum Role {
-        V, A, U
-    }
+    private PlayerRole role;
 }

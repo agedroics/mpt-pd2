@@ -2,3 +2,5 @@
 *.iml
 /target
 /data
+/frontend/node/
+/frontend/node_modules/

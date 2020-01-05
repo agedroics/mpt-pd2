@@ -13,11 +13,11 @@ import java.time.Duration;
 public class SubstitutionDto {
 
     @XmlAttribute(name = "Laiks")
-    private Duration time;
+    private Duration time = Duration.ZERO;
 
     @XmlAttribute(name = "Nr1")
-    private Integer substitutedPlayerNumber;
+    private Integer substitutedNumber = 0;
 
     @XmlAttribute(name = "Nr2")
-    private Integer substitutePlayerNumber;
+    private Integer substituteNumber = 0;
 }

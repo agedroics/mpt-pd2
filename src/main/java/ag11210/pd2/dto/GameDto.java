@@ -1,5 +1,6 @@
 package ag11210.pd2.dto;
 
+import ag11210.pd2.configuration.LocalDateAdapter;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -7,6 +8,7 @@ import lombok.Setter;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -16,16 +18,17 @@ import java.util.List;
 @XmlRootElement(name = "Spele")
 public class GameDto {
 
-    @XmlAttribute(name = "Laiks")
+    @XmlAttribute(name = "Laiks", required = true)
+    @XmlJavaTypeAdapter(value = LocalDateAdapter.class)
     private LocalDate date;
 
     @XmlAttribute(name = "Skatitaji")
-    private Integer spectators;
+    private Long spectators = 0L;
 
     @XmlAttribute(name = "Vieta")
     private String location;
 
-    @XmlElement(name = "Komanda")
+    @XmlElement(name = "Komanda", required = true)
     private List<TeamDto> teams;
 
     @XmlElement(name = "VT")
