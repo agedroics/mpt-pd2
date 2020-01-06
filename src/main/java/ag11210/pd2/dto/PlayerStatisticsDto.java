@@ -14,6 +14,6 @@ public class PlayerStatisticsDto {
     private String firstName;
     private String lastName;
     private String team;
-    private Integer goals;
-    private Integer assists;
+    private Long goals;
+    private Long assists;
 }

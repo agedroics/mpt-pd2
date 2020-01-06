@@ -1,6 +1,7 @@
 package ag11210.pd2.controller;
 
 import ag11210.pd2.dto.TournamentTableRowDto;
+import ag11210.pd2.model.PlayerEntity;
 import ag11210.pd2.repository.GameRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -36,9 +37,15 @@ public class TournamentController {
 
         gameRepository.findAll().forEach(game -> {
             boolean overtime = game.getGoals().stream()
-                    .anyMatch(goal -> goal.getTime().compareTo(Duration.of(60, ChronoUnit.MINUTES)) > 0);
+                    .anyMatch(goal -> goal.getTime().compareTo(Duration.of(60, ChronoUnit.MINUTES)) >= 0);
             Map<String, Long> teamGoals = game.getGoals().stream()
                     .collect(Collectors.groupingBy(goal -> goal.getPlayer().getTeam(), Collectors.counting()));
+            game.getStarters().stream()
+                    .map(PlayerEntity::getTeam)
+                    .distinct()
+                    .filter(Predicate.not(teamGoals::containsKey))
+                    .findAny()
+                    .ifPresent(team -> teamGoals.put(team, 0L));
             String winningTeam = teamGoals.entrySet().stream()
                     .max(Comparator.comparingLong(Map.Entry::getValue))
                     .map(Map.Entry::getKey)
@@ -48,7 +55,8 @@ public class TournamentController {
                 statistics.setGoalsFor(statistics.getGoalsFor() + goals);
                 teamGoals.keySet().stream()
                         .filter(Predicate.not(Predicate.isEqual(team)))
-                        .forEach(otherTeam -> {
+                        .findAny()
+                        .ifPresent(otherTeam -> {
                             TournamentTableRowDto otherTeamStatistics = statisticsGetter.apply(otherTeam);
                             otherTeamStatistics.setGoalsAgainst(otherTeamStatistics.getGoalsAgainst() + goals);
                         });

@@ -13,8 +13,12 @@ public class DbManagerController {
 
     @PostMapping
     public void openDbManager() {
-        if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
-            DatabaseManagerSwing.main(new String[] {"-noexit", "-url", "jdbc:hsqldb:file:data/", "-user", "sa"});
+        try {
+            if (Desktop.isDesktopSupported()) {
+                DatabaseManagerSwing.main(new String[]{"-noexit", "-url", "jdbc:hsqldb:file:data/", "-user", "sa"});
+            }
+        } catch (Exception e) {
+            // do nothing
         }
     }
 }

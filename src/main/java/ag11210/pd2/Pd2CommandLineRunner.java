@@ -10,9 +10,13 @@ import java.net.URI;
 public class Pd2CommandLineRunner implements CommandLineRunner {
 
     @Override
-    public void run(String... args) throws Exception {
-        if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
-            Desktop.getDesktop().browse(new URI("http://localhost:8080"));
+    public void run(String... args) {
+        try {
+            if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
+                Desktop.getDesktop().browse(new URI("http://localhost:8080"));
+            }
+        } catch (Exception e) {
+            // do nothing
         }
     }
 }

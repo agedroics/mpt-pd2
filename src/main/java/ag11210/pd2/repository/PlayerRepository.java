@@ -2,12 +2,13 @@ package ag11210.pd2.repository;
 
 import ag11210.pd2.dto.PlayerStatisticsDto;
 import ag11210.pd2.model.PlayerEntity;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 @Repository
 public interface PlayerRepository extends JpaRepository<PlayerEntity, Long> {
@@ -18,8 +19,11 @@ public interface PlayerRepository extends JpaRepository<PlayerEntity, Long> {
             "  p.firstName" +
             ", p.lastName" +
             ", p.team" +
-            ", p.goals.size" +
-            ", p.assistedGoals.size)" +
-            " from Player p order by 4 desc, 5 desc, 1, 2, 3")
-    Stream<PlayerStatisticsDto> streamPlayerStatistics();
+            ", (select count(goals) from p.goals goals)" +
+            ", (select count(assists) from p.assistedGoals assists))" +
+            " from Player p" +
+            " where (select count(goals) from p.goals goals) > 0" +
+            " or (select count(assists) from p.assistedGoals assists) > 0" +
+            " order by 4 desc, 5 desc, 1, 2, 3")
+    List<PlayerStatisticsDto> getPlayerStatistics(Pageable pageable);
 }
