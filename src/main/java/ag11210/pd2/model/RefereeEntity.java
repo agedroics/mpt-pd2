@@ -1,25 +1,23 @@
 package ag11210.pd2.model;
 
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 @Getter
 @Setter
-@EqualsAndHashCode(of = "id")
 @Entity(name = "Referee")
-@Table(name = "referees", uniqueConstraints = @UniqueConstraint(columnNames = {"first_name", "last_name"}))
-public class RefereeEntity {
+@Table(name = "referee",
+        uniqueConstraints = @UniqueConstraint(name = "referee_uk", columnNames = {"first_name", "last_name"}))
+public class RefereeEntity extends AbstractEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(name = "first_name")
+    @Column(name = "first_name", nullable = false)
     private String firstName;
 
-    @Column(name = "last_name")
+    @Column(name = "last_name", nullable = false)
     private String lastName;
 }

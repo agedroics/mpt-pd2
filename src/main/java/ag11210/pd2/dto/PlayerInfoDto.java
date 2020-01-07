@@ -15,12 +15,12 @@ public class PlayerInfoDto {
     @XmlAttribute(name = "Nr")
     protected Integer number = 0;
 
-    @XmlAttribute(name = "Vards")
+    @XmlAttribute(name = "Vards", required = true)
     private String firstName;
 
-    @XmlAttribute(name = "Uzvards")
+    @XmlAttribute(name = "Uzvards", required = true)
     private String lastName;
 
-    @XmlAttribute(name = "Loma")
+    @XmlAttribute(name = "Loma", required = true)
     private PlayerRole role;
 }

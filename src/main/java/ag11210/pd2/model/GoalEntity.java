@@ -1,6 +1,5 @@
 package ag11210.pd2.model;
 
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,27 +10,26 @@ import java.util.Set;
 
 @Getter
 @Setter
-@EqualsAndHashCode(of = "id")
 @Entity(name = "Goal")
-@Table(name = "goals")
-public class GoalEntity {
+@Table(name = "goal")
+public class GoalEntity extends AbstractEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @ManyToOne(optional = false, cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "player_game_id", nullable = false,
+            foreignKey = @ForeignKey(name = "goal_player_game_id_fk"))
+    private PlayerGameEntity playerGame;
 
-    @ManyToOne(optional = false)
-    private GameEntity game;
-
-    @Column(nullable = false)
+    @Column(name = "time", nullable = false)
     private Duration time;
 
-    @ManyToOne(optional = false)
-    private PlayerEntity player;
-
-    @Column(nullable = false)
+    @Column(name = "penalty", nullable = false)
     private Boolean penalty;
 
-    @ManyToMany
-    private Set<PlayerEntity> assistingPlayers = new HashSet<>();
+    @ManyToMany(cascade = CascadeType.PERSIST)
+    @JoinTable(name = "goal_assisting_player_game",
+            joinColumns = @JoinColumn(name = "goal_id", nullable = false,
+                    foreignKey = @ForeignKey(name = "goal_assisting_player_game_goal_id_fk")),
+            inverseJoinColumns = @JoinColumn(name = "player_game_id", nullable = false,
+                    foreignKey = @ForeignKey(name = "goal_assisting_player_game_player_game_id_fk")))
+    private Set<PlayerGameEntity> assistingPlayerGames = new HashSet<>();
 }

@@ -1,8 +1,9 @@
 package ag11210.pd2.controller;
 
+import ag11210.pd2.Utils;
 import ag11210.pd2.dto.TournamentTableRowDto;
-import ag11210.pd2.model.PlayerEntity;
 import ag11210.pd2.repository.GameRepository;
+import ag11210.pd2.repository.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,8 +13,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
-import java.util.*;
-import java.util.function.Function;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -22,42 +25,40 @@ import java.util.stream.Collectors;
 public class TournamentController {
 
     @Autowired
+    private TeamRepository teamRepository;
+    @Autowired
     private GameRepository gameRepository;
 
     @GetMapping
     @Transactional(readOnly = true)
     public List<TournamentTableRowDto> getTournamentTable() {
-        Map<String, TournamentTableRowDto> teamStatistics = new HashMap<>();
-        Function<String, TournamentTableRowDto> statisticsGetter = team ->
-                teamStatistics.computeIfAbsent(team, teamName -> {
+        Map<String, TournamentTableRowDto> teamStatistics = teamRepository.findAll().stream()
+                .map(team -> {
                     TournamentTableRowDto row = new TournamentTableRowDto();
-                    row.setTeam(teamName);
+                    row.setTeam(team.getName());
                     return row;
-                });
+                }).collect(Utils.groupingById(TournamentTableRowDto::getTeam));
 
-        gameRepository.findAll().forEach(game -> {
-            boolean overtime = game.getGoals().stream()
+        gameRepository.getForTournamentTable().forEach(game -> {
+            boolean overtime = game.getPlayerGames().stream()
+                    .flatMap(playerGame -> playerGame.getGoals().stream())
                     .anyMatch(goal -> goal.getTime().compareTo(Duration.of(60, ChronoUnit.MINUTES)) >= 0);
-            Map<String, Long> teamGoals = game.getGoals().stream()
-                    .collect(Collectors.groupingBy(goal -> goal.getPlayer().getTeam(), Collectors.counting()));
-            game.getStarters().stream()
-                    .map(PlayerEntity::getTeam)
-                    .distinct()
-                    .filter(Predicate.not(teamGoals::containsKey))
-                    .findAny()
-                    .ifPresent(team -> teamGoals.put(team, 0L));
+            Map<String, Long> teamGoals = game.getPlayerGames().stream()
+                    .collect(Collectors.groupingBy(
+                            playerGame -> playerGame.getPlayer().getTeam().getName(),
+                            Collectors.summingLong(playerGame -> playerGame.getGoals().size())
+                    ));
             String winningTeam = teamGoals.entrySet().stream()
                     .max(Comparator.comparingLong(Map.Entry::getValue))
                     .map(Map.Entry::getKey)
                     .get();
             teamGoals.forEach((team, goals) -> {
-                TournamentTableRowDto statistics = statisticsGetter.apply(team);
+                TournamentTableRowDto statistics = teamStatistics.get(team);
                 statistics.setGoalsFor(statistics.getGoalsFor() + goals);
                 teamGoals.keySet().stream()
                         .filter(Predicate.not(Predicate.isEqual(team)))
-                        .findAny()
-                        .ifPresent(otherTeam -> {
-                            TournamentTableRowDto otherTeamStatistics = statisticsGetter.apply(otherTeam);
+                        .forEach(otherTeam -> {
+                            TournamentTableRowDto otherTeamStatistics = teamStatistics.get(otherTeam);
                             otherTeamStatistics.setGoalsAgainst(otherTeamStatistics.getGoalsAgainst() + goals);
                         });
                 if (team.equals(winningTeam)) {

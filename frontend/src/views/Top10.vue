@@ -4,6 +4,14 @@
       <b-card :title="`#${index + 1} ${player.firstName} ${player.lastName}`">
         <b-container>
           <b-row tag="dl" class="mb-0">
+            <dt>Komanda</dt>
+            <dd class="ml-auto">{{ player.team }}</dd>
+          </b-row>
+          <b-row tag="dl" class="mb-0">
+            <dt>Numurs</dt>
+            <dd class="ml-auto">{{ player.number }}</dd>
+          </b-row>
+          <b-row tag="dl" class="mb-0">
             <dt>Gūtie vārti</dt>
             <dd class="ml-auto">{{ player.goals }}</dd>
           </b-row>

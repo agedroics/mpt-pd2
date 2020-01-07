@@ -11,9 +11,9 @@ import javax.xml.bind.annotation.XmlAttribute;
 @EqualsAndHashCode
 public class RefereeDto {
 
-    @XmlAttribute(name = "Vards")
+    @XmlAttribute(name = "Vards", required = true)
     private String firstName;
 
-    @XmlAttribute(name = "Uzvards")
+    @XmlAttribute(name = "Uzvards", required = true)
     private String lastName;
 }

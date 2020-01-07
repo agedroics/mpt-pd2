@@ -1,6 +1,5 @@
 package ag11210.pd2.model;
 
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,41 +10,32 @@ import java.util.Set;
 
 @Getter
 @Setter
-@EqualsAndHashCode(of = "id")
 @Entity(name = "Game")
-@Table(name = "games")
-public class GameEntity {
+@Table(name = "game")
+public class GameEntity extends AbstractEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(nullable = false)
+    @Column(name = "date", nullable = false)
     private LocalDate date;
 
-    @Column(nullable = false)
+    @Column(name = "spectators", nullable = false)
     private Long spectators;
 
+    @Column(name = "location")
     private String location;
 
-    @ManyToMany
-    private Set<PlayerEntity> players = new HashSet<>();
-
-    @ManyToMany
-    private Set<PlayerEntity> starters = new HashSet<>();
-
-    @ManyToOne
+    @ManyToOne(optional = false, cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "referee_id", nullable = false,
+            foreignKey = @ForeignKey(name = "game_referee_id_fk"))
     private RefereeEntity referee;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.PERSIST)
+    @JoinTable(name = "game_assistant_referee",
+            joinColumns = @JoinColumn(name = "game_id", nullable = false,
+                    foreignKey = @ForeignKey(name = "game_assistant_referee_game_id_fk")),
+            inverseJoinColumns = @JoinColumn(name = "referee_id", nullable = false,
+                    foreignKey = @ForeignKey(name = "game_assistant_referee_referee_id_fk")))
     private Set<RefereeEntity> assistantReferees = new HashSet<>();
 
-    @OneToMany(mappedBy = "game")
-    private Set<FoulEntity> fouls = new HashSet<>();
-
-    @OneToMany(mappedBy = "game")
-    private Set<GoalEntity> goals = new HashSet<>();
-
-    @OneToMany(mappedBy = "game")
-    private Set<SubstitutionEntity> substitutions = new HashSet<>();
+    @OneToMany(mappedBy = "game", cascade = CascadeType.ALL)
+    private Set<PlayerGameEntity> playerGames = new HashSet<>();
 }

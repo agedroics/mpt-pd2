@@ -15,7 +15,7 @@ public class Pd2CommandLineRunner implements CommandLineRunner {
             if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
                 Desktop.getDesktop().browse(new URI("http://localhost:8080"));
             }
-        } catch (Exception e) {
+        } catch (Exception | Error e) {
             // do nothing
         }
     }

@@ -1,5 +1,12 @@
 <template>
-  <b-table striped hover :fields="fields" :items="itemsProvider"/>
+  <b-table striped hover responsive :fields="fields" :items="itemsProvider">
+    <template v-slot:cell(wins)="data">
+      {{ data.item.wins }} ({{ data.item.overtimeWins }})
+    </template>
+    <template v-slot:cell(losses)="data">
+      {{ data.item.losses }} ({{ data.item.overtimeLosses }})
+    </template>
+  </b-table>
 </template>
 
 <script>
@@ -16,16 +23,10 @@
           label: 'Komanda'
         }, {
           key: 'wins',
-          label: 'Uzvaras'
-        }, {
-          key: 'overtimeWins',
-          label: 'Uzvaras papildlaikā'
+          label: 'Uzvaras (papildlaikā)'
         }, {
           key: 'losses',
-          label: 'Zaudējumi'
-        }, {
-          key: 'overtimeLosses',
-          label: 'Zaudējumi papildlaikā'
+          label: 'Zaudējumi (papildlaikā)'
         }, {
           key: 'goalsFor',
           label: 'Gūtie vārti'

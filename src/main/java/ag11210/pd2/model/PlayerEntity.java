@@ -1,6 +1,5 @@
 package ag11210.pd2.model;
 
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,31 +9,29 @@ import java.util.Set;
 
 @Getter
 @Setter
-@EqualsAndHashCode(of = "id")
 @Entity(name = "Player")
-@Table(name = "players", uniqueConstraints = @UniqueConstraint(columnNames = {"team", "number"}))
-public class PlayerEntity {
+@Table(name = "player",
+        uniqueConstraints = @UniqueConstraint(name = "player_uk", columnNames = {"team_id", "number"}))
+public class PlayerEntity extends AbstractEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(name = "team", nullable = false)
-    private String team;
+    @ManyToOne(optional = false, cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "team_id", nullable = false,
+            foreignKey = @ForeignKey(name = "player_team_id_fk"))
+    private TeamEntity team;
 
     @Column(name = "number", nullable = false)
     private Integer number;
 
+    @Column(name = "first_name", nullable = false)
     private String firstName;
+
+    @Column(name = "last_name", nullable = false)
     private String lastName;
 
     @Enumerated(EnumType.STRING)
-    @Column(columnDefinition = "char(1)")
+    @Column(name = "role", nullable = false, columnDefinition = "char(1)")
     private PlayerRole role;
 
-    @OneToMany(mappedBy = "player")
-    private Set<GoalEntity> goals = new HashSet<>();
-
-    @ManyToMany(mappedBy = "assistingPlayers")
-    private Set<GoalEntity> assistedGoals = new HashSet<>();
+    @OneToMany(mappedBy = "player", cascade = CascadeType.ALL)
+    private Set<PlayerGameEntity> playerGames = new HashSet<>();
 }

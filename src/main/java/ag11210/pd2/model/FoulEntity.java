@@ -1,6 +1,5 @@
 package ag11210.pd2.model;
 
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,21 +8,15 @@ import java.time.Duration;
 
 @Getter
 @Setter
-@EqualsAndHashCode(of = "id")
 @Entity(name = "Foul")
-@Table(name = "fouls")
-public class FoulEntity {
+@Table(name = "foul")
+public class FoulEntity extends AbstractEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @ManyToOne(optional = false, cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "player_game_id", nullable = false,
+            foreignKey = @ForeignKey(name = "foul_player_game_id_fk"))
+    private PlayerGameEntity playerGame;
 
-    @ManyToOne(optional = false)
-    private GameEntity game;
-
-    @Column(nullable = false)
+    @Column(name = "time", nullable = false)
     private Duration time;
-
-    @ManyToOne(optional = false)
-    private PlayerEntity player;
 }

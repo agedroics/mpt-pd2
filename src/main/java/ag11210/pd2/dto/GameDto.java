@@ -35,7 +35,7 @@ public class GameDto {
     @XmlElement(name = "Komanda", required = true)
     private List<TeamDto> teams;
 
-    @XmlElement(name = "VT")
+    @XmlElement(name = "VT", required = true)
     private RefereeDto referee;
 
     @XmlElement(name = "T")

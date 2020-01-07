@@ -8,22 +8,22 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public interface PlayerRepository extends JpaRepository<PlayerEntity, Long> {
 
-    Optional<PlayerEntity> findByTeamAndNumber(String team, Integer number);
-
     @Query("select new ag11210.pd2.dto.PlayerStatisticsDto(" +
             "  p.firstName" +
             ", p.lastName" +
-            ", p.team" +
-            ", (select count(goals) from p.goals goals)" +
-            ", (select count(assists) from p.assistedGoals assists))" +
+            ", p.team.name" +
+            ", p.number" +
+            ", sum((select count(goals) from pg.goals goals))" +
+            ", sum((select count(assists) from pg.assistedGoals assists)))" +
             " from Player p" +
-            " where (select count(goals) from p.goals goals) > 0" +
-            " or (select count(assists) from p.assistedGoals assists) > 0" +
+            " join p.playerGames pg" +
+            " where exists (select 1 from pg.goals)" +
+            " or exists (select 1 from pg.assistedGoals)" +
+            " group by p, p.firstName, p.lastName, p.team.name" +
             " order by 4 desc, 5 desc, 1, 2, 3")
     List<PlayerStatisticsDto> getPlayerStatistics(Pageable pageable);
 }

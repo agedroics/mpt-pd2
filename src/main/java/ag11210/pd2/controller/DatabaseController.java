@@ -8,16 +8,16 @@ import org.springframework.web.bind.annotation.RestController;
 import java.awt.*;
 
 @RestController
-@RequestMapping("api/open-db-manager")
-public class DbManagerController {
+@RequestMapping("api/database")
+public class DatabaseController {
 
-    @PostMapping
-    public void openDbManager() {
+    @PostMapping("open-manager")
+    public void openDatabaseManager() {
         try {
             if (Desktop.isDesktopSupported()) {
                 DatabaseManagerSwing.main(new String[]{"-noexit", "-url", "jdbc:hsqldb:file:data/", "-user", "sa"});
             }
-        } catch (Exception e) {
+        } catch (Exception | Error e) {
             // do nothing
         }
     }
