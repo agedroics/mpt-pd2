@@ -1,6 +1,7 @@
 <template>
   <b-row>
-    <b-col md="6" v-for="(player, index) of players" class="mb-3">
+    <b-col md="6" v-for="(player, index) of players"
+           :key="[player.team, player.number]" class="mb-3">
       <b-card :title="`#${index + 1} ${player.firstName} ${player.lastName}`">
         <b-container>
           <b-row tag="dl" class="mb-0">

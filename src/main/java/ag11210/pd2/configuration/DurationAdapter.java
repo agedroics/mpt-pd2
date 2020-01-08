@@ -16,6 +16,6 @@ public class DurationAdapter extends XmlAdapter<String, Duration> {
 
     @Override
     public String marshal(Duration v) {
-        return v == null ? null : String.format("%02d:%02d", v.toMinutesPart(), v.toSecondsPart());
+        return v == null ? null : String.format("%02d:%02d", v.toMinutes(), v.toSecondsPart());
     }
 }

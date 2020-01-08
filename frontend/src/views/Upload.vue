@@ -6,7 +6,7 @@
                    placeholder="Izvēlieties failu(-s)"
                    browse-text="Izvēlēties"
                    drop-placeholder="Velciet failu(-s) šeit"
-                   accept="application/xml, application/json"
+                   accept="text/xml, application/xml, application/json"
                    :state="state"/>
       <b-form-valid-feedback :state="state">Fail(-i) veiksmīgi ielādēti</b-form-valid-feedback>
       <b-form-invalid-feedback :state="state">{{ error }}</b-form-invalid-feedback>

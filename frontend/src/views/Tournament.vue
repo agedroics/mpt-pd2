@@ -1,10 +1,17 @@
 <template>
-  <b-table striped hover responsive :fields="fields" :items="itemsProvider">
+  <b-table striped hover outlined stacked="md" class="tournament-table"
+           :fields="fields" :items="itemsProvider" :busy="busy">
     <template v-slot:cell(wins)="data">
       {{ data.item.wins }} ({{ data.item.overtimeWins }})
     </template>
     <template v-slot:cell(losses)="data">
       {{ data.item.losses }} ({{ data.item.overtimeLosses }})
+    </template>
+    <template v-slot:table-busy>
+      <div class="text-center text-danger my-2">
+        <b-spinner class="align-middle mr-2"/>
+        <strong>Ielādē...</strong>
+      </div>
     </template>
   </b-table>
 </template>
@@ -23,10 +30,10 @@
           label: 'Komanda'
         }, {
           key: 'wins',
-          label: 'Uzvaras (papildlaikā)'
+          label: 'Uzvaras (papildl.)'
         }, {
           key: 'losses',
-          label: 'Zaudējumi (papildlaikā)'
+          label: 'Zaudējumi (papildl.)'
         }, {
           key: 'goalsFor',
           label: 'Gūtie vārti'
@@ -36,26 +43,26 @@
         }, {
           key: 'points',
           label: 'Punkti'
-        }]
+        }],
+        busy: false
       }
     },
     methods: {
       itemsProvider(ctx, callback) {
+        this.busy = true;
         axios.get('/api/tournament')
-            .then(response => callback(response.data))
+            .then(response => {
+              this.busy = false;
+              callback(response.data)
+            })
       }
     }
   }
 </script>
 
 <style>
-  td:nth-of-type(2), td:last-of-type {
+  .tournament-table td:nth-of-type(2),
+  .tournament-table td:last-of-type {
     font-weight: bold;
-  }
-  th, td {
-    text-align: center;
-  }
-  th:nth-of-type(2), td:nth-of-type(2) {
-    text-align: start;
   }
 </style>

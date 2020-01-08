@@ -13,7 +13,7 @@ import javax.xml.bind.annotation.XmlAttribute;
 public class PlayerInfoDto {
 
     @XmlAttribute(name = "Nr")
-    protected Integer number = 0;
+    private Integer number = 0;
 
     @XmlAttribute(name = "Vards", required = true)
     private String firstName;

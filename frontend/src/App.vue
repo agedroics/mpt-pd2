@@ -8,6 +8,8 @@
           <b-navbar-nav>
             <b-nav-item to="/turnirs" active-class="active">Turnīra tabula</b-nav-item>
             <b-nav-item to="/top10" active-class="active">Spēlētāju TOP 10</b-nav-item>
+            <b-nav-item to="/komandas" active-class="active">Komandas</b-nav-item>
+            <b-nav-item to="/tiesnesi" active-class="active">Tiesneši</b-nav-item>
             <b-nav-item to="/ielade" active-class="active">Failu ielāde</b-nav-item>
           </b-navbar-nav>
           <b-navbar-nav class="ml-auto">
@@ -62,5 +64,8 @@
   button:disabled {
     cursor: not-allowed;
     pointer-events: all !important;
+  }
+  html {
+    font-size: 14px;
   }
 </style>
